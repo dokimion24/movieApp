@@ -1,55 +1,68 @@
-const inputEl = document.querySelector('input');
-const buttonEl = document.querySelector('button');
-const moviesEl = document.querySelector('ul');
-const moreEl = document.querySelector('.more');
+const $movies = document.querySelector('ul');
+const $moreBtn = document.querySelector('.more');
+const $searchForm = document.querySelector('form');
+const $input = $searchForm.querySelector('input');
+const $searchBtn = $searchForm.querySelector('button');
 
-let searchText = '';
-let pageNumber = 1;
+const search = {
+  title: '',
+  year: '',
+  page: '',
+};
 
-inputEl.addEventListener('input', () => {
-  searchText = inputEl.value;
-});
+// searchformEl.addEventListener('input', () => {
+//   searchText = inputEl.value;
+// });
 
-buttonEl.addEventListener('click', async () => {
+$searchForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  search.title = $input.value;
+  search.page = 1;
   const movies = await getMovies();
-  const { Search } = movies;
-  console.log(Search);
-
-  renderMovies(Search, true);
+  console.log(movies);
+  console.log(search);
+  renderMovies(movies, true);
 });
 
-moreEl.addEventListener('click', async () => {
+$moreBtn.addEventListener('click', async () => {
+  search.page++;
   const movies = await getMovies();
-  const { Search, totalResults } = movies;
-
-  renderMovies(Search, false);
+  if (search.page * 10 <= movies.totalResults) {
+    renderMovies(movies, false);
+  }
 });
 
-let movies = [];
+const movies = [];
 
+// 검색 영화 가져오기
 const getMovies = async () => {
-  const res = await fetch(
-    `https://omdbapi.com/?apikey=7035c60c&s=${searchText}&page=${pageNumber}`
-  );
+  const s = `&s=${search.title}`;
+  const y = `&y=${search.year}`;
+  const p = `&page=${search.page}`;
+  const res = await fetch(`https://omdbapi.com/?apikey=7035c60c${s}${y}${p}`);
   const json = await res.json();
-  return json;
+  if (json.Response === 'True') {
+    const { Search, totalResults } = json;
+    return {
+      Search,
+      totalResults,
+    };
+  }
+  return json.Error;
 };
 
 const renderMovies = (movies, isFirst) => {
-  const movieEls = movies.map((movie) => {
-    const { Title, Year, Type, Poster } = movie;
-    const movieEl = document.createElement('li');
-    const titleEl = document.createElement('h3');
-    const posterEl = document.createElement('img');
-
-    titleEl.textContent = Title;
-    posterEl.src = Poster;
-    movieEl.append(titleEl, posterEl);
-    return movieEl;
-  });
-
   if (isFirst) {
-    moviesEl.innerHTML = '';
+    $movies.innerHTML = '';
   }
-  moviesEl.append(...movieEls);
+  movies.Search.forEach((movie) => {
+    const $movie = document.createElement('li');
+
+    $movie.innerHTML = `
+      <h3>${movie.Title}</h3>
+      <img src='${movie.Poster}' alt='${movie.Title}' />
+    `;
+    $movies.append($movie);
+  });
 };
