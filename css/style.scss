@@ -1,0 +1,24 @@
+.body {
+  padding-top: 65px;
+}
+
+.header {
+  // position: fixed;
+  // top: 0px;
+  // left: 0;
+  width: 100%;
+  height: 65px;
+  box-shadow: 0 1px 0 0 rgb(0 0 0 / 8%);
+}
+
+.inner {
+  margin: 0 auto;
+  width: 1200px;
+  height: 100%;
+}
+
+section {
+  height: 43px;
+  background-color: rgb(244, 244, 244);
+  display: block;
+}
