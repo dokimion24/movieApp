@@ -1,11 +1,11 @@
-import { getMovies } from './api.js';
+import { getMovies } from './api/api.js';
 
 const $movies = document.querySelector('ul');
 const $moreBtn = document.querySelector('.more');
 const $searchForm = document.querySelector('form');
 const $searchInput = $searchForm.querySelector('input');
-const $searchText = document.querySelector('.text');
-const $searchTextResult = document.querySelector('.text-result');
+const $searchText = document.querySelector('.area-text');
+const $searchTextResult = document.querySelector('.text__result');
 
 const movieInfo = {
   title: '',
@@ -40,25 +40,30 @@ const renderMovies = (movies, isFirst) => {
   }
   movies.Search.forEach((movie) => {
     const $movie = document.createElement('li');
+    $movie.className = 'movie-item';
 
     $movie.innerHTML = `
+      <img src='${
+        movie.Poster === 'N/A'
+          ? 'https://img.icons8.com/windows/512/no-image.png'
+          : movie.Poster
+      }' alt='${movie.Title}' />
       <h3>${movie.Title}</h3>
-      <img src='${movie.Poster}' alt='${movie.Title}' />
     `;
+
     $movies.append($movie);
   });
 
   // 무한 스크롤
   (() => {
-    const options = { threshold: 0.2 };
-
     const callback = (entries, observer) => {
       entries.forEach(async (entry) => {
         if (entry.isIntersecting) {
+          movieInfo.page += 1;
+
           const movies = await getMovies(movieInfo);
           if (movies.totalResults >= movieInfo.page * 10) {
             renderMovies(movies, false);
-            movieInfo.page += 1;
           } else {
             io.unobserve(entry.target);
           }
@@ -66,7 +71,7 @@ const renderMovies = (movies, isFirst) => {
       });
     };
 
-    const io = new IntersectionObserver(callback, options);
-    io.observe(document.querySelector('li:last-child'));
+    const io = new IntersectionObserver(callback);
+    io.observe(document.querySelector('.movie-item:last-child'));
   })();
 };
