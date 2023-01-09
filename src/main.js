@@ -23,7 +23,10 @@ $searchForm.addEventListener('submit', async (e) => {
   movieInfo.title = $searchInput.value;
   movieInfo.page = 1;
   const movies = await getMovies(movieInfo);
-
+  if (movies.Response === 'False') {
+    alert(movies.Error);
+    movies = [];
+  }
   $searchTextResult.innerHTML = `'${movieInfo.title}' 의 검색결과`;
   $searchText.style.display = 'block';
 
@@ -50,15 +53,15 @@ const renderMovies = (movies, isFirst) => {
 
     $movie.addEventListener('click', async () => {
       const movieDetailInfo = await getMovieDetail(movie.imdbID);
-      console.log(movieDetailInfo);
-      openModal(movie);
+      openModal(movieDetailInfo);
     });
 
     $modal.addEventListener('click', (event) => {
       if (event.target === event.currentTarget) {
         $modal.style.display = 'none';
         $body.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-        $modalContent.innerHTML = ``;
+        $body.classList.remove('stop-scrolling');
+        $modalContent.innerHTML = '';
       }
     });
   });
@@ -88,19 +91,22 @@ const renderMovies = (movies, isFirst) => {
 //영화 상세 페이지 open
 const openModal = (movie) => {
   $modal.style.display = 'block';
-  // $header.style.display = 'none';
-  $body.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+  $body.classList.add('stop-scrolling');
   renderMovieDetail(movie);
 };
 
 const renderMovieDetail = async (movie) => {
   const movieDetail = await getMovieDetail(movie.imdbID);
-  console.log(movieDetail);
   const $movieDetail = document.createElement('div');
+  console.log('start');
   $movieDetail.className = 'movie-detail';
-  $movieDetail.innerHTML = ``;
+  $modalContent.innerHTML = '';
   $movieDetail.innerHTML = `
-      <div class="poster" style="background-image: url('${movieDetail.Poster}');"></div>
+      <div class="poster" style="background-image: url(${
+        movieDetail.Poster === 'N/A'
+          ? 'https://img.icons8.com/windows/512/no-image.png'
+          : movieDetail.Poster.replace('SX300', 'SX500')
+      }) ;"></div>
       <div class="specs">
         <h2 class="title">${movieDetail.Title}</h2> 
         <div class="label">
@@ -113,7 +119,7 @@ const renderMovieDetail = async (movie) => {
           <span>Director ${movieDetail.Writer}</span>
         </div>
         <div class="rating">
-          <span>⭐ ${movieDetail.Ratings[0].Value}</span>
+          <span>⭐ ${movieDetail?.Ratings[0]?.Value}</span>
         </div>
       </div>
   `;
