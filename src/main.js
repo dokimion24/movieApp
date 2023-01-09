@@ -1,4 +1,4 @@
-import { getMovies } from './api/api.js';
+import { getMovies, getMovieDetail } from './api/api.js';
 
 const $movies = document.querySelector('ul');
 const $moreBtn = document.querySelector('.more');
@@ -6,6 +6,10 @@ const $searchForm = document.querySelector('form');
 const $searchInput = $searchForm.querySelector('input');
 const $searchText = document.querySelector('.area-text');
 const $searchTextResult = document.querySelector('.text__result');
+const $header = document.querySelector('.header');
+const $modal = document.querySelector('.modal');
+const $modalContent = $modal.querySelector('.modal-content');
+const $body = document.querySelector('body');
 
 const movieInfo = {
   title: '',
@@ -26,14 +30,6 @@ $searchForm.addEventListener('submit', async (e) => {
   renderMovies(movies, true);
 });
 
-// $moreBtn.addEventListener('click', async () => {
-//   movieInfo.page += 1;
-//   const movies = await getMovies(movieInfo);
-//   if (moviInfo.page * 10 <= movies.totalResults) {
-//     renderMovies(movies, false);
-//   }
-// });
-
 const renderMovies = (movies, isFirst) => {
   if (isFirst) {
     $movies.innerHTML = '';
@@ -50,13 +46,26 @@ const renderMovies = (movies, isFirst) => {
       }' alt='${movie.Title}' />
       <h3>${movie.Title}</h3>
     `;
-
     $movies.append($movie);
+
+    $movie.addEventListener('click', async () => {
+      const movieDetailInfo = await getMovieDetail(movie.imdbID);
+      console.log(movieDetailInfo);
+      openModal(movie);
+    });
+
+    $modal.addEventListener('click', (event) => {
+      if (event.target === event.currentTarget) {
+        $modal.style.display = 'none';
+        $body.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+        $modalContent.innerHTML = ``;
+      }
+    });
   });
 
   // 무한 스크롤
   (() => {
-    const callback = (entries, observer) => {
+    const callback = (entries) => {
       entries.forEach(async (entry) => {
         if (entry.isIntersecting) {
           movieInfo.page += 1;
@@ -74,4 +83,40 @@ const renderMovies = (movies, isFirst) => {
     const io = new IntersectionObserver(callback);
     io.observe(document.querySelector('.movie-item:last-child'));
   })();
+};
+
+//영화 상세 페이지 open
+const openModal = (movie) => {
+  $modal.style.display = 'block';
+  // $header.style.display = 'none';
+  $body.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+  renderMovieDetail(movie);
+};
+
+const renderMovieDetail = async (movie) => {
+  const movieDetail = await getMovieDetail(movie.imdbID);
+  console.log(movieDetail);
+  const $movieDetail = document.createElement('div');
+  $movieDetail.className = 'movie-detail';
+  $movieDetail.innerHTML = ``;
+  $movieDetail.innerHTML = `
+      <div class="poster" style="background-image: url('${movieDetail.Poster}');"></div>
+      <div class="specs">
+        <h2 class="title">${movieDetail.Title}</h2> 
+        <div class="label">
+          <span>${movieDetail.Released} ·</span>
+          <span>${movieDetail.Country}</span>
+        </div>
+        <span>${movieDetail.Genre}</span>
+        <div class="director">
+          <span>Director</span>
+          <span>Director ${movieDetail.Writer}</span>
+        </div>
+        <div class="rating">
+          <span>⭐ ${movieDetail.Ratings[0].Value}</span>
+        </div>
+      </div>
+  `;
+
+  $modalContent.append($movieDetail);
 };
