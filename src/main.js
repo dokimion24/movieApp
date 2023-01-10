@@ -24,8 +24,7 @@ $searchForm.addEventListener('submit', async (e) => {
   movieInfo.page = 1;
   const movies = await getMovies(movieInfo);
   if (movies.Response === 'False') {
-    alert(movies.Error);
-    movies = [];
+    alert('Not Found');
   }
   $searchTextResult.innerHTML = `'${movieInfo.title}' 의 검색결과`;
   $searchText.style.display = 'block';
@@ -52,17 +51,10 @@ const renderMovies = (movies, isFirst) => {
     $movies.append($movie);
 
     $movie.addEventListener('click', async () => {
-      const movieDetailInfo = await getMovieDetail(movie.imdbID);
-      openModal(movieDetailInfo);
-    });
-
-    $modal.addEventListener('click', (event) => {
-      if (event.target === event.currentTarget) {
-        $modal.style.display = 'none';
-        $body.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-        $body.classList.remove('stop-scrolling');
-        $modalContent.innerHTML = '';
-      }
+      const movieDetail = await getMovieDetail(movie.imdbID);
+      $modal.style.display = 'block';
+      $body.classList.add('stop-scrolling');
+      renderMovieDetail(movieDetail);
     });
   });
 
@@ -89,14 +81,8 @@ const renderMovies = (movies, isFirst) => {
 };
 
 //영화 상세 페이지 open
-const openModal = (movie) => {
-  $modal.style.display = 'block';
-  $body.classList.add('stop-scrolling');
-  renderMovieDetail(movie);
-};
 
-const renderMovieDetail = async (movie) => {
-  const movieDetail = await getMovieDetail(movie.imdbID);
+const renderMovieDetail = async (movieDetail) => {
   const $movieDetail = document.createElement('div');
   console.log('start');
   $movieDetail.className = 'movie-detail';
@@ -126,3 +112,12 @@ const renderMovieDetail = async (movie) => {
 
   $modalContent.append($movieDetail);
 };
+
+$modal.addEventListener('click', (event) => {
+  if (event.target === event.currentTarget) {
+    $modal.style.display = 'none';
+    $body.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+    $body.classList.remove('stop-scrolling');
+    $modalContent.innerHTML = '';
+  }
+});
