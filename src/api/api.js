@@ -1,5 +1,4 @@
 const getMovies = async (movieInfo) => {
-  console.log(movieInfo);
   const s = `&s=${movieInfo.title}`;
   const y = `&y=${movieInfo.year}`;
   const p = `&page=${movieInfo.page}`;
@@ -12,7 +11,18 @@ const getMovies = async (movieInfo) => {
       totalResults,
     };
   }
+  return json;
+};
+
+const getMovieDetail = async (id) => {
+  const res = await fetch(
+    `https://omdbapi.com/?apikey=7035c60c&i=${id}&plot=full`
+  );
+  const json = await res.json();
+  if (json.Response === 'True') {
+    return json;
+  }
   return json.Error;
 };
 
-export { getMovies };
+export { getMovies, getMovieDetail };
