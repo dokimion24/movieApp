@@ -10,6 +10,17 @@ const $header = document.querySelector('.header');
 const $modal = document.querySelector('.modal');
 const $modalContent = $modal.querySelector('.modal-content');
 const $body = document.querySelector('body');
+const $movieDetail = document.querySelector('.movie-detail');
+
+const toggleModal = () => {
+  $modal.classList.toggle('visible');
+};
+
+const toggleBackdrop = () => {};
+
+const toggleScrolling = () => {
+  $body.classList.toggle('stop-scrolling');
+};
 
 const movieInfo = {
   title: '',
@@ -51,9 +62,9 @@ const renderMovies = (movies, isFirst) => {
     $movies.append($movie);
 
     $movie.addEventListener('click', async () => {
+      toggleModal();
+      toggleScrolling();
       const movieDetail = await getMovieDetail(movie.imdbID);
-      $modal.style.display = 'block';
-      $body.classList.add('stop-scrolling');
       renderMovieDetail(movieDetail);
     });
   });
@@ -83,11 +94,9 @@ const renderMovies = (movies, isFirst) => {
 //영화 상세 페이지 open
 
 const renderMovieDetail = async (movieDetail) => {
-  const $movieDetail = document.createElement('div');
-  console.log('start');
-  $movieDetail.className = 'movie-detail';
-  $modalContent.innerHTML = '';
-  $movieDetail.innerHTML = `
+  renderSpinner(true);
+
+  $modalContent.innerHTML = `
       <div class="poster" style="background-image: url(${
         movieDetail.Poster === 'N/A'
           ? 'https://img.icons8.com/windows/512/no-image.png'
@@ -109,15 +118,31 @@ const renderMovieDetail = async (movieDetail) => {
         </div>
       </div>
   `;
+  $modal.append($modalContent);
 
-  $modalContent.append($movieDetail);
+  renderSpinner(false);
 };
 
 $modal.addEventListener('click', (event) => {
   if (event.target === event.currentTarget) {
-    $modal.style.display = 'none';
+    toggleModal();
+    toggleScrolling();
     $body.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-    $body.classList.remove('stop-scrolling');
     $modalContent.innerHTML = '';
   }
 });
+
+const renderSpinner = (isActive) => {
+  const $loader = document.createElement('div');
+  const $loaderWrap = document.createElement('div');
+  $loader.classList.add('loader');
+  $loaderWrap.classList.add('loader-wrap');
+  $movieDetail.append($loaderWrap);
+  $loaderWrap.append($loader);
+
+  if (isActive) {
+    $loaderWrap.style.display = 'block';
+  } else {
+    $loaderWrap.style.display = 'none';
+  }
+};
