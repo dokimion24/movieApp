@@ -12,14 +12,22 @@ const $modalContent = $modal.querySelector('.modal-content');
 const $body = document.querySelector('body');
 const $movieDetail = document.querySelector('.movie-detail');
 
-const toggleModal = () => {
-  $modal.classList.toggle('visible');
+const toggleBackdrop = () => {
+  $modal.classList.toggle('backdrop');
 };
-
-const toggleBackdrop = () => {};
 
 const toggleScrolling = () => {
   $body.classList.toggle('stop-scrolling');
+};
+
+const toggleModal = () => {
+  $modal.classList.toggle('visible');
+  toggleBackdrop();
+  toggleScrolling();
+};
+
+const clickCancleBtn = () => {
+  toggleModal();
 };
 
 const movieInfo = {
@@ -63,7 +71,6 @@ const renderMovies = (movies, isFirst) => {
 
     $movie.addEventListener('click', async () => {
       toggleModal();
-      toggleScrolling();
       const movieDetail = await getMovieDetail(movie.imdbID);
       renderMovieDetail(movieDetail);
     });
@@ -94,8 +101,6 @@ const renderMovies = (movies, isFirst) => {
 //영화 상세 페이지 open
 
 const renderMovieDetail = async (movieDetail) => {
-  renderSpinner(true);
-
   $modalContent.innerHTML = `
       <div class="poster" style="background-image: url(${
         movieDetail.Poster === 'N/A'
@@ -117,20 +122,24 @@ const renderMovieDetail = async (movieDetail) => {
           <span>⭐ ${movieDetail?.Ratings[0]?.Value}</span>
         </div>
       </div>
+      <div class="cancel-btn">
+        <span class="material-symbols-outlined">close</span>
+      </div>
   `;
-  $modal.append($modalContent);
+  const $cancelBtn = document.querySelector('.cancel-btn');
+  $cancelBtn.addEventListener('click', clickCancleBtn);
 
-  renderSpinner(false);
+  $modal.append($modalContent);
 };
 
 $modal.addEventListener('click', (event) => {
   if (event.target === event.currentTarget) {
     toggleModal();
-    toggleScrolling();
-    $body.style.backgroundColor = 'rgba(0, 0, 0, 0)';
     $modalContent.innerHTML = '';
   }
 });
+
+$cancelBtn.addEventListener('click', clickCancleBtn);
 
 const renderSpinner = (isActive) => {
   const $loader = document.createElement('div');
