@@ -1,34 +1,13 @@
 import { getMovies, getMovieDetail } from './api/api.js';
+import { toggleModal, clickCancelBtn, stopLoading } from './modal.js';
 
 const $movies = document.querySelector('ul');
-const $moreBtn = document.querySelector('.more');
 const $searchForm = document.querySelector('form');
 const $searchInput = $searchForm.querySelector('input');
 const $searchText = document.querySelector('.area-text');
 const $searchTextResult = document.querySelector('.text__result');
-const $header = document.querySelector('.header');
 const $modal = document.querySelector('.modal');
-const $modalContent = $modal.querySelector('.modal-content');
-const $body = document.querySelector('body');
-const $movieDetail = document.querySelector('.movie-detail');
-
-const toggleBackdrop = () => {
-  $modal.classList.toggle('backdrop');
-};
-
-const toggleScrolling = () => {
-  $body.classList.toggle('stop-scrolling');
-};
-
-const toggleModal = () => {
-  $modal.classList.toggle('visible');
-  toggleBackdrop();
-  toggleScrolling();
-};
-
-const clickCancleBtn = () => {
-  toggleModal();
-};
+const $modalContent = document.querySelector('.modal-content');
 
 const movieInfo = {
   title: '',
@@ -71,8 +50,8 @@ const renderMovies = (movies, isFirst) => {
 
     $movie.addEventListener('click', async () => {
       toggleModal();
-      const movieDetail = await getMovieDetail(movie.imdbID);
-      renderMovieDetail(movieDetail);
+      const movieDetailInfo = await getMovieDetail(movie.imdbID);
+      renderMovieDetail(movieDetailInfo);
     });
   });
 
@@ -100,26 +79,26 @@ const renderMovies = (movies, isFirst) => {
 
 //영화 상세 페이지 open
 
-const renderMovieDetail = async (movieDetail) => {
+const renderMovieDetail = async (movieDetailInfo) => {
   $modalContent.innerHTML = `
-      <div class="poster" style="background-image: url(${
-        movieDetail.Poster === 'N/A'
+      <div class="poster" stryle="background-image: url(${
+        movieDetailInfo.Poster === 'N/A'
           ? 'https://img.icons8.com/windows/512/no-image.png'
-          : movieDetail.Poster.replace('SX300', 'SX500')
+          : movieDetailInfo.Poster.replace('SX300', 'SX500')
       }) ;"></div>
       <div class="specs">
-        <h2 class="title">${movieDetail.Title}</h2> 
+        <h2 class="title">${movieDetailInfo.Title}</h2>
         <div class="label">
-          <span>${movieDetail.Released} ·</span>
-          <span>${movieDetail.Country}</span>
+          <span>${movieDetailInfo.Released} ·</span>
+          <span>${movieDetailInfo.Country}</span>
         </div>
-        <span>${movieDetail.Genre}</span>
+        <span>${movieDetailInfo.Genre}</span>
         <div class="director">
           <span>Director</span>
-          <span>Director ${movieDetail.Writer}</span>
+          <span>Director ${movieDetailInfo.Writer}</span>
         </div>
         <div class="rating">
-          <span>⭐ ${movieDetail?.Ratings[0]?.Value}</span>
+          <span>⭐ ${movieDetailInfo?.Ratings[0]?.Value}</span>
         </div>
       </div>
       <div class="cancel-btn">
@@ -127,9 +106,9 @@ const renderMovieDetail = async (movieDetail) => {
       </div>
   `;
   const $cancelBtn = document.querySelector('.cancel-btn');
-  $cancelBtn.addEventListener('click', clickCancleBtn);
+  $cancelBtn.addEventListener('click', clickCancelBtn);
 
-  $modal.append($modalContent);
+  stopLoading();
 };
 
 $modal.addEventListener('click', (event) => {
@@ -138,20 +117,3 @@ $modal.addEventListener('click', (event) => {
     $modalContent.innerHTML = '';
   }
 });
-
-$cancelBtn.addEventListener('click', clickCancleBtn);
-
-const renderSpinner = (isActive) => {
-  const $loader = document.createElement('div');
-  const $loaderWrap = document.createElement('div');
-  $loader.classList.add('loader');
-  $loaderWrap.classList.add('loader-wrap');
-  $movieDetail.append($loaderWrap);
-  $loaderWrap.append($loader);
-
-  if (isActive) {
-    $loaderWrap.style.display = 'block';
-  } else {
-    $loaderWrap.style.display = 'none';
-  }
-};
