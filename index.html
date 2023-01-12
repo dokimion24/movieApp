@@ -5,15 +5,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="./style.css" />
-    <script defer src="./src/app.js" type="module"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+    />
+    <link rel="stylesheet" href="./css/style.css" />
+    <script defer src="./src/main.js" type="module"></script>
   </head>
   <body>
-    <div id="app"></div>
+    <div class="modal">
+      <div class="loader-wrap">
+        <div class="loader"></div>
+      </div>
+      <div class="modal-content"></div>
+    </div>
 
-    <input type="text" />
-    <button>검색</button>
-    <ul class="movies"></ul>
-    <button class="more">더보기</button>
+    <header class="header">
+      <div class="inner">
+        <form>
+          <label>
+            <input type="search-text" placeholder="검색하세요" />
+            <button>Search</button>
+          </label>
+        </form>
+      </div>
+    </header>
+
+    <section class="area-text">
+      <div class="inner">
+        <div class="text__result"></div>
+      </div>
+    </section>
+
+    <main>
+      <div class="inner">
+        <ul class="movie-list"></ul>
+      </div>
+    </main>
   </body>
 </html>
