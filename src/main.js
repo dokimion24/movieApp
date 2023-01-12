@@ -9,26 +9,31 @@ const $searchTextResult = document.querySelector('.text__result');
 const $modal = document.querySelector('.modal');
 const $modalContent = document.querySelector('.modal-content');
 
+//함수 작명 handler
+//movieInfo 객체 지역
+//render 함수 기능 최소화
+
 const movieInfo = {
   title: '',
   year: '',
   page: '',
 };
 
-$searchForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
+const showSearchingText = () => {
+  $searchTextResult.innerHTML = `'${movieInfo.title}' 의 검색결과`;
+  $searchText.style.display = 'block';
+};
+
+const searchMovieHandler = async (event) => {
+  event.preventDefault();
 
   movieInfo.title = $searchInput.value;
   movieInfo.page = 1;
   const movies = await getMovies(movieInfo);
-  if (movies.Response === 'False') {
-    alert('Not Found');
-  }
-  $searchTextResult.innerHTML = `'${movieInfo.title}' 의 검색결과`;
-  $searchText.style.display = 'block';
 
+  showSearchingText();
   renderMovies(movies, true);
-});
+};
 
 const renderMovies = (movies, isFirst) => {
   if (isFirst) {
@@ -81,7 +86,7 @@ const renderMovies = (movies, isFirst) => {
 
 const renderMovieDetail = async (movieDetailInfo) => {
   $modalContent.innerHTML = `
-      <div class="poster" stryle="background-image: url(${
+      <div class="poster" style="background-image: url(${
         movieDetailInfo.Poster === 'N/A'
           ? 'https://img.icons8.com/windows/512/no-image.png'
           : movieDetailInfo.Poster.replace('SX300', 'SX500')
@@ -117,3 +122,5 @@ $modal.addEventListener('click', (event) => {
     $modalContent.innerHTML = '';
   }
 });
+
+$searchForm.addEventListener('submit', searchMovieHandler);
