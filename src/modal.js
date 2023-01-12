@@ -25,6 +25,6 @@ export const toggleModal = () => {
   toggleScrolling();
 };
 
-export const clickCancleBtn = () => {
+export const clickCancelBtn = () => {
   toggleModal();
 };
