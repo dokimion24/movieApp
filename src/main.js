@@ -1,4 +1,4 @@
-import { getMovies, getMovieDetail } from './api/api.js';
+import { getMovies, getMovieDetail } from './getMovieData.js';
 import { toggleModal, clickCancelBtn, stopLoading } from './modal.js';
 
 const $movies = document.querySelector('ul');
@@ -30,6 +30,10 @@ const clearSearchInput = () => {
 
 const clearSearchMovie = () => {
   $movies.innerHTML = '';
+};
+
+const clearMovieDetail = () => {
+  $modalContent.innerHTML = '';
 };
 
 const searchMovieHandler = async (event) => {
@@ -126,7 +130,7 @@ const renderMovieDetail = async (movieDetailInfo) => {
 $modal.addEventListener('click', (event) => {
   if (event.target === event.currentTarget) {
     toggleModal();
-    $modalContent.innerHTML = '';
+    clearMovieDetail();
   }
 });
 
