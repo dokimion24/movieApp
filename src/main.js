@@ -19,26 +19,33 @@ const movieInfo = {
   page: '',
 };
 
-const showSearchingText = () => {
+const showSearchText = () => {
   $searchTextResult.innerHTML = `'${movieInfo.title}' 의 검색결과`;
   $searchText.style.display = 'block';
 };
 
+const clearSearchInput = () => {
+  $searchInput.value = '';
+};
+
+const clearSearchMovie = () => {
+  $movies.innerHTML = '';
+};
+
 const searchMovieHandler = async (event) => {
   event.preventDefault();
+  clearSearchMovie();
 
   movieInfo.title = $searchInput.value;
   movieInfo.page = 1;
-  const movies = await getMovies(movieInfo);
 
-  showSearchingText();
-  renderMovies(movies, true);
+  const movies = await getMovies(movieInfo);
+  showSearchText();
+  renderMovies(movies);
+  clearSearchInput();
 };
 
-const renderMovies = (movies, isFirst) => {
-  if (isFirst) {
-    $movies.innerHTML = '';
-  }
+const renderMovies = (movies) => {
   movies.Search.forEach((movie) => {
     const $movie = document.createElement('li');
     $movie.className = 'movie-item';
