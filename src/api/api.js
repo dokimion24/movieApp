@@ -1,4 +1,4 @@
-const getMovies = async (movieInfo) => {
+export const getMovies = async (movieInfo) => {
   const s = `&s=${movieInfo.title}`;
   const y = `&y=${movieInfo.year}`;
   const p = `&page=${movieInfo.page}`;
@@ -14,7 +14,7 @@ const getMovies = async (movieInfo) => {
   return json;
 };
 
-const getMovieDetail = async (id) => {
+export const getMovieDetail = async (id) => {
   const res = await fetch(
     `https://omdbapi.com/?apikey=7035c60c&i=${id}&plot=full`
   );
@@ -24,5 +24,3 @@ const getMovieDetail = async (id) => {
   }
   return json.Error;
 };
-
-export { getMovies, getMovieDetail };
