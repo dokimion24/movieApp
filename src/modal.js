@@ -1,13 +1,13 @@
 const $modal = document.querySelector('.modal');
 const $body = document.querySelector('body');
-const $loaderWrap = document.querySelector('.loader-wrap');
+const $loaderContainer = document.querySelector('.loader__container');
 
 const startLoading = () => {
-  $loaderWrap.classList.add('visible');
+  $loaderContainer.classList.add('visible');
 };
 
 export const stopLoading = () => {
-  $loaderWrap.classList.remove('visible');
+  $loaderContainer.classList.remove('visible');
 };
 
 const toggleBackdrop = () => {
@@ -25,6 +25,7 @@ export const toggleModal = () => {
   toggleScrolling();
 };
 
-export const clickCancelBtn = () => {
+// 취소 버튼 핸들러
+export const clickCancelBtnHandler = () => {
   toggleModal();
 };

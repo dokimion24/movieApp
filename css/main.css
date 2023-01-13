@@ -1,0 +1,218 @@
+body {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+    'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+}
+
+input {
+  background: none;
+  border: none;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.search {
+  width: 1200px;
+  margin: 80px auto 0;
+}
+
+.search__container {
+  padding: 40px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 26%);
+}
+
+.search__form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search__input {
+  background-color: #f5f5f7;
+  border-radius: 10px;
+  width: 300px;
+  height: 40px;
+  padding: 0 30px;
+}
+
+.search__btn {
+  background-color: #3498db;
+  border: none;
+  padding: 0 20px;
+  border-radius: 10px;
+  height: 40px;
+}
+
+.search--result {
+  margin-top: 30px;
+  text-align: center;
+}
+
+main {
+  width: 1200px;
+  margin: 80px auto;
+}
+
+.movie__container {
+  padding: 50px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 26%);
+}
+
+.movie__list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 80px 40px;
+}
+
+.movie__item {
+  box-shadow: 0 2px 8px rgb(0 0 0 / 26%);
+  border-radius: 10px;
+  transition: all 0.2s linear;
+}
+
+.movie__item:hover {
+  transform: scale(1.1);
+}
+
+.invisible {
+  position: static;
+}
+
+.movie__item img {
+  border-radius: 10px 10px 0 0;
+
+  width: 250px;
+  height: 360px;
+  object-fit: cover;
+}
+
+.movie__item--info {
+  height: 70px;
+  width: 250px;
+}
+
+.movie__item--info h3 {
+  font-size: 18px;
+  text-align: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 20px 10px 0 10px;
+  font-weight: 600;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.modal.visible {
+  display: block;
+}
+
+.modal.backdrop {
+  background-color: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.modal__content {
+  display: flex;
+  position: relative;
+  top: 180px;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 40px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 1000px;
+  height: 60%;
+}
+
+.modal__content .poster {
+  width: 500px;
+  margin-right: 70px;
+  border-radius: 10px;
+  background-color: #e9ecef;
+  background-size: cover;
+  background-position: center;
+  flex-shrink: 0;
+}
+
+.modal__content .specs {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.modal__content .specs .blod {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.modal__content .specs .title {
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.modal__content .specs .label {
+  font-size: 18px;
+  color: #fdc000;
+  font-weight: 600;
+}
+
+.modal__content .specs .plot {
+  line-height: 1.6;
+  overflow: scroll;
+}
+
+.cancel-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}
+
+.loader__container {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.loader__container.visible {
+  display: block;
+}
+
+.loader {
+  animation: spin 2s linear infinite;
+  width: 60px;
+  height: 60px;
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #3498db;
+  border-radius: 50%;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
