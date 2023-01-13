@@ -12,8 +12,8 @@ const $searchTextResult = document.querySelector('.search--result');
 const $modal = document.querySelector('.modal');
 const $modalContent = document.querySelector('.modal__content');
 const $movieContainer = document.querySelector('main div');
-
 const $moviList = document.querySelector('ul');
+const $scrollBtn = document.querySelector('.scroll-top');
 
 const movieInfo = {
   title: '',
@@ -43,6 +43,19 @@ const showSearchText = (num) => {
   } else {
     $searchTextResult.innerHTML = `검색 결과가 없습니다.`;
   }
+};
+
+const scrollTopHandler = () => {
+  window.scrollY > 200
+    ? ($scrollBtn.style.opacity = '1')
+    : ($scrollBtn.style.opacity = '0');
+};
+
+const moveTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
 };
 
 // 무한 스크롤
@@ -176,4 +189,6 @@ $modal.addEventListener('click', (event) => {
   }
 });
 
+$scrollBtn.addEventListener('click', moveTop);
+document.addEventListener('scroll', scrollTopHandler);
 $searchForm.addEventListener('submit', searchMovieHandler);
