@@ -1,5 +1,10 @@
 import { getMovies, getMovieDetail } from './getMovieData.js';
-import { toggleModal, clickCancelBtnHandler, stopLoading } from './modal.js';
+import {
+  toggleModal,
+  clickCancelBtnHandler,
+  stopLoading,
+  startLoading,
+} from './modal.js';
 
 const $searchForm = document.querySelector('form');
 const $searchInput = $searchForm.querySelector('input');
@@ -9,11 +14,6 @@ const $modalContent = document.querySelector('.modal__content');
 const $movieContainer = document.querySelector('main div');
 
 const $moviList = document.querySelector('ul');
-const $movieItems = document.querySelectorAll('movie__tiem');
-
-//함수 작명 handler
-//movieInfo 객체 지역
-//render 함수 기능 최소화
 
 const movieInfo = {
   title: '',
@@ -39,7 +39,7 @@ const deleteMovieListUI = () => {
 
 const showSearchText = (num) => {
   if (num) {
-    $searchTextResult.innerHTML = `'${movieInfo.title}' 의 검색결과 ${num}개 검색되었습니다.`;
+    $searchTextResult.innerHTML = `'${movieInfo.title}' 검색결과 ${num}개 검색되었습니다.`;
   } else {
     $searchTextResult.innerHTML = `검색 결과가 없습니다.`;
   }
@@ -76,16 +76,19 @@ const searchMovieHandler = async (event) => {
 
   if (movieInfo.title === '') {
     alert('영화 제목을 입력하세요');
-    deleteMovieListUI()
-    showSearchText(false)
+    deleteMovieListUI();
+    showSearchText(false);
     return;
   }
   if (movieInfo.title.length < 3) {
     alert('3글자 이상 입력하세요');
-    showSearchText(false)
-    deleteMovieListUI()
+    showSearchText(false);
+    deleteMovieListUI();
     return;
   }
+
+  deleteMovieListUI();
+  startLoading();
 
   const movies = await getMovies(movieInfo);
   console.log(movies);
@@ -108,9 +111,7 @@ const renderMovies = (movies) => {
     $movie.className = 'movie__item';
     $movie.innerHTML = `
       <img src='${
-        movie.Poster === 'N/A'
-          ? '../img/no-image.png'
-          : movie.Poster
+        movie.Poster === 'N/A' ? '../img/no-image.png' : movie.Poster
       }' alt='${movie.Title}' />
       <div class="movie__item--info">
         <h3>${movie.Title}</h3>
@@ -123,6 +124,7 @@ const renderMovies = (movies) => {
       const movieDetailInfo = await getMovieDetail(movie.imdbID);
       renderMovieDetail(movieDetailInfo);
     });
+    stopLoading();
   });
 
   scrollInfinity();
@@ -170,6 +172,7 @@ $modal.addEventListener('click', (event) => {
   if (event.target === event.currentTarget) {
     toggleModal();
     clearMovieDetail();
+    stopLoading();
   }
 });
 
