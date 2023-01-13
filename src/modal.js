@@ -2,7 +2,7 @@ const $modal = document.querySelector('.modal');
 const $body = document.querySelector('body');
 const $loaderContainer = document.querySelector('.loader__container');
 
-const startLoading = () => {
+export const startLoading = () => {
   $loaderContainer.classList.add('visible');
 };
 
@@ -25,7 +25,6 @@ export const toggleModal = () => {
   toggleScrolling();
 };
 
-// 취소 버튼 핸들러
 export const clickCancelBtnHandler = () => {
   toggleModal();
 };
