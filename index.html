@@ -33,7 +33,9 @@
               type="input"
               placeholder="검색하세요"
             />
-            <button class="search__btn">검색</button>
+            <button class="search__btn">
+              <span class="material-symbols-outlined"> search </span>
+            </button>
           </form>
           <div class="search--result"></div>
         </div>
@@ -46,10 +48,15 @@
       </div>
     </main>
 
+    <div class="loader__container">
+      <div class="loader"></div>
+    </div>
+
+    <div class="scroll-top">
+        <span class="material-symbols-outlined">arrow_upward </span>
+    </div>
+
     <div class="modal">
-      <div class="loader__container">
-        <div class="loader"></div>
-      </div>
       <div class="modal__content"></div>
     </div>
   </body>
