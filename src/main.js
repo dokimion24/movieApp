@@ -34,7 +34,7 @@ const clearMovieDetail = () => {
 };
 
 const deleteMovieListUI = () => {
-  $movieContainer.classList.add('movie__container');
+  $movieContainer.classList.remove('movie__container');
 };
 
 const showSearchText = (num) => {
@@ -76,12 +76,14 @@ const searchMovieHandler = async (event) => {
 
   if (movieInfo.title === '') {
     alert('영화 제목을 입력하세요');
-    deleteMovieListUI();
+    deleteMovieListUI()
+    showSearchText(false)
     return;
   }
   if (movieInfo.title.length < 3) {
     alert('3글자 이상 입력하세요');
-    deleteMovieListUI();
+    showSearchText(false)
+    deleteMovieListUI()
     return;
   }
 
