@@ -27,4 +27,5 @@ export const toggleModal = () => {
 
 export const clickCancelBtnHandler = () => {
   toggleModal();
+  stopLoading();
 };
