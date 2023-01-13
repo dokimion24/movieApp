@@ -176,7 +176,10 @@ const renderMovieDetail = async (movieDetailInfo) => {
       </div>
   `;
   const $cancelBtn = document.querySelector('.cancel-btn');
-  $cancelBtn.addEventListener('click', clickCancelBtnHandler);
+  $cancelBtn.addEventListener('click', () => {
+    clickCancelBtnHandler();
+    clearMovieDetail();
+  });
 
   stopLoading();
 };
