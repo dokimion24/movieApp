@@ -40,11 +40,14 @@ button:hover {
 }
 
 .search__btn {
-  background-color: #3498db;
+  background-color: #fdc000;
   border: none;
-  padding: 0 20px;
+  padding: 0 10px;
   border-radius: 10px;
   height: 40px;
+}
+.search__btn:hover {
+  background-color: #fd9c00;
 }
 
 .search--result {
