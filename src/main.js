@@ -145,6 +145,7 @@ const renderMovies = (movies) => {
 
 //영화 상세 페이지 render
 const renderMovieDetail = async (movieDetailInfo) => {
+  console.log(movieDetailInfo.Ratings)
   $modalContent.innerHTML = `
       <div class="poster" style="background-image: url(${
         movieDetailInfo.Poster === 'N/A'
@@ -168,7 +169,7 @@ const renderMovieDetail = async (movieDetailInfo) => {
         </div>
         <div class="rating">
           <div class="blod">Rating</div>
-          <span>⭐ ${movieDetailInfo?.Ratings[0]?.Value}</span>
+          <span>⭐ ${movieDetailInfo?.Ratings[0]?.Value.slice(0,3)}</span>
         </div>
       </div>
       <div class="cancel-btn">
